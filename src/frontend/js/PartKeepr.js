@@ -8,6 +8,8 @@ Ext.application({
     	Ext.get("loading").hide();
     	Ext.setLocale('en_US');
 
+		this.eventNotification = new PartKeepr.EventNotification();
+
     	this.createLayout();
 
     	PartKeepr.application = this;
@@ -38,6 +40,9 @@ Ext.application({
     },
     getPartManager: function () {
         return this.partManager;
+    },
+    getEventNotification: function () {
+	return this.eventNotification;
     },
     onContextMenu: function (e, target) {
     	if (!e.ctrlKey) {
@@ -78,6 +83,7 @@ Ext.application({
 		
 		this.getStatusbar().getConnectionButton().setConnected();
 		
+	this.eventNotification.startService();
     },
     /**
      * Re-creates the part manager. This is usually called when the "compactLayout" configuration option has been

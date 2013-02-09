@@ -1,6 +1,7 @@
 <?php
 namespace PartKeepr\Part;
 
+use PartKeepr\EventNotification\EventManager;
 use PartKeepr\StorageLocation\StorageLocation,
 	PartKeepr\Footprint\Footprint,
 	PartKeepr\PartCategory\PartCategoryManager,
@@ -648,7 +649,6 @@ class Part extends BaseEntity implements Serializable, Deserializable {
 		$this->checkCategoryConsistency();
 		$this->checkStorageLocationConsistency();
 	}
-	
 	/**
 	 * 
 	 * Checks if the requirements for database persisting are given.
@@ -662,6 +662,16 @@ class Part extends BaseEntity implements Serializable, Deserializable {
 		$this->checkStorageLocationConsistency();
 	}
 	
+	/**
+	 * This method is a callback for the PostPersist event. We will add it to our database
+	 * dependent eventNotification.
+	 *
+	 * @PostPersist @PostUpdate
+	 */
+	public function onPostPersist(){
+		EventManager::getInstance()->getOrCreateByName("Part.update")->emit();
+	}
+
 	/**
 	 * Returns a string representation of the part
 	 * 

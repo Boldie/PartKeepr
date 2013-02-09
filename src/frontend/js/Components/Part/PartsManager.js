@@ -153,6 +153,12 @@ Ext.define('PartKeepr.PartManager', {
         }
 
 		this.callParent();
+
+		var en = PartKeepr.getApplication().getEventNotification();
+		en.startListeningTo("Part.update");
+
+		this.addManagedListener( en, "Part.update", function( name )
+				{ console.log("Store update!"); this.grid.store.load(); /*this.store.reload();*/ }, this );
 	},
 	/**
 	 * Called when the sync button was clicked. Highlights the category
